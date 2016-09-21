@@ -35,6 +35,7 @@ public final class WatsUp {
 				"cL3Yon8JUQ4f");
 
 		// Try to speak
+		System.out.println("Trying to speak");
 		try {
 			InputStream stream = service.synthesize("Hello World",
 					Voice.EN_ALLISON);
@@ -50,7 +51,9 @@ public final class WatsUp {
 			stream.close();
 
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println("Speaking failed error was: " + e);
+		} finally {
+			System.out.println("Speaking attempt complete!");
 		}
 
 	}
