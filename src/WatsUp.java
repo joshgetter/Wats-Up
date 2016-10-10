@@ -15,28 +15,33 @@ import com.ibm.watson.developer_cloud.text_to_speech.v1.util.WaveUtils;
  * 
  * @author Josh Getter
  * @author Charles Billingsley
+ * @author Brent
  *
  */
 
 public final class WatsUp implements Runnable {
 
+	/**
+	 * Dummy constructor to lock down the WatsUp class.
+	 */
 	public WatsUp() {
 		return;
 	}
-
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		System.out.println("Welcome to Wats Up!");
 		TextToSpeech service = new TextToSpeech();
-		service.setUsernameAndPassword("04bd6bbf-2415-4071-a59a-0285a6a253fa", "cL3Yon8JUQ4f");
+		service.setUsernameAndPassword("04bd6bbf-2415-4071-a59a-0285a6a253fa",
+				"cL3Yon8JUQ4f");
 
 		// Try to speak
 		System.out.println("Trying to speak");
 		try {
 			Clip audioClip = AudioSystem.getClip();
-			InputStream stream = service.synthesize("Hello World", Voice.EN_ALLISON);
+			InputStream stream = service.synthesize("Hello World",
+					Voice.EN_ALLISON);
 			InputStream in = WaveUtils.reWriteWaveHeader(stream);
 			audioClip.open(AudioSystem.getAudioInputStream(in));
 			audioClip.start();

@@ -8,24 +8,42 @@ import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
 import com.ibm.watson.developer_cloud.text_to_speech.v1.model.Voice;
 import com.ibm.watson.developer_cloud.text_to_speech.v1.util.WaveUtils;
 
+/**
+ * A class that converts written text to audio by sending it to the Watson API.
+ * 
+ * @author Josh Getter
+ * @author Charles Billingsley
+ *
+ */
 public class TextToAudio implements Runnable {
 
-	String toSpeack;
+	/**
+	 * The string to be spoken by Watson.
+	 */
+	private String spokenPhrase;
 
-	public TextToAudio(String toSpeack) {
-		this.toSpeack = toSpeack;
+	/**
+	 * Constructor for the TextToAudio class.
+	 * 
+	 * @param passedSpokenPhrase
+	 *            the phrase to be spoken
+	 */
+	public TextToAudio(final String passedSpokenPhrase) {
+		this.spokenPhrase = passedSpokenPhrase;
 	}
 
 	@Override
-	public void run() {
+	public final void run() {
 		TextToSpeech service = new TextToSpeech();
-		service.setUsernameAndPassword("04bd6bbf-2415-4071-a59a-0285a6a253fa", "cL3Yon8JUQ4f");
+		service.setUsernameAndPassword("04bd6bbf-2415-4071-a59a-0285a6a253fa",
+				"cL3Yon8JUQ4f");
 
 		// Try to speak
 		System.out.println("Trying to speak");
 		try {
 			Clip audioClip = AudioSystem.getClip();
-			InputStream stream = service.synthesize(toSpeack, Voice.EN_ALLISON);
+			InputStream stream = service.synthesize(spokenPhrase,
+					Voice.EN_ALLISON);
 			InputStream in = WaveUtils.reWriteWaveHeader(stream);
 			audioClip.open(AudioSystem.getAudioInputStream(in));
 			audioClip.start();
