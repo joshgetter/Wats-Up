@@ -78,22 +78,13 @@ public class CaptureAudio implements Runnable {
 
 	Thread thread;
 
-	public void start() {
-		errStr = null;
-		thread = new Thread(this);
-		thread.setName("Capture");
-		thread.start();
-	}
-
-	public void stop() {
-		thread = null;
-	}
 
 	private void shutDown(String message) {
 		if ((errStr = message) != null && thread != null) {
 			thread = null;
 			System.err.println(errStr);
 		}
+		thread = null;
 	}
 
 	public void run() {

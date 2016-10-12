@@ -12,7 +12,7 @@ import javafx.stage.Stage;
  * 
  * @author Josh Getter
  * @author Charles Billingsley
- * @author Brent
+ * @author Brent Willman
  *
  */
 public class GUI extends Application {
