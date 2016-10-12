@@ -40,21 +40,21 @@ public class GUI extends Application {
 	@Override
 	public final void start(final Stage primaryStage) {
 		primaryStage.setTitle("WatsUp");
-		Button btn = new Button();
-		btn.setText("Make Watson Speak");
-		btn.setOnAction(new EventHandler<ActionEvent>() {
+		Button watsonSpeakButton = new Button();
+		watsonSpeakButton.setText("Make Watson Speak");
+		watsonSpeakButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(final ActionEvent event) {
-				Runnable r = new TextToAudio(
+				Runnable runner = new TextToAudio(
 						"Hello! This is Watson, how may I assist you?");
-				Thread t = new Thread(r);
-				t.start();
+				Thread thread = new Thread(runner);
+				thread.start();
 			}
 		});
 
 		StackPane root = new StackPane();
-		root.getChildren().add(btn);
+		root.getChildren().add(watsonSpeakButton);
 		primaryStage.setScene(new Scene(root, GUI_WIDTH, GUI_HEIGHT));
 		primaryStage.show();
 	}
