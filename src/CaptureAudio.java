@@ -42,6 +42,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Callable;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -62,7 +63,7 @@ import javax.sound.sampled.TargetDataLine;
  * @author Josh Getter
  * @author Brent Willman
  */
-public class CaptureAudio implements Runnable {
+public class CaptureAudio {
 
 	final int bufSize = 16384;
 
@@ -87,7 +88,7 @@ public class CaptureAudio implements Runnable {
 		thread = null;
 	}
 
-	public void run() {
+public AudioInputStream getStream() {
 
 		duration = 0;
 		audioInputStream = null;
@@ -109,7 +110,7 @@ public class CaptureAudio implements Runnable {
 
 		if (!AudioSystem.isLineSupported(info)) {
 			shutDown("Line matching " + info + " not supported.");
-			return;
+			return null;
 		}
 
 		// get and open the target data line for capture.
@@ -119,14 +120,14 @@ public class CaptureAudio implements Runnable {
 			line.open(format, line.getBufferSize());
 		} catch (LineUnavailableException ex) {
 			shutDown("Unable to open the line: " + ex);
-			return;
+			return null;
 		} catch (SecurityException ex) {
 			shutDown(ex.toString());
 			// JavaSound.showInfoDialog();
-			return;
+			return null;
 		} catch (Exception ex) {
 			shutDown(ex.toString());
-			return;
+			return null;
 		}
 
 		// play back the captured audio data
@@ -166,17 +167,17 @@ public class CaptureAudio implements Runnable {
 		ByteArrayInputStream bais = new ByteArrayInputStream(audioBytes);
 		audioInputStream = new AudioInputStream(bais, format, audioBytes.length
 				/ frameSizeInBytes);
-
-		long milliseconds = (long) ((audioInputStream.getFrameLength() * 1000) / format
+		return audioInputStream;
+		/*long milliseconds = (long) ((audioInputStream.getFrameLength() * 1000) / format
 				.getFrameRate());
-		duration = milliseconds / 1000.0;
+		duration = milliseconds / 1000.0;*/
 
-		try {
+		/*try {
 			audioInputStream.reset();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			return;
-		}
+			return null;
+		}*/
 
 	}
 }
