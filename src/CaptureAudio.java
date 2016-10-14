@@ -38,12 +38,6 @@
  * All other methods copyright Steve Potts, 2002
  */
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.Callable;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -58,56 +52,61 @@ import javax.sound.sampled.TargetDataLine;
  * 
  * @author Steve Potts
  * 
- * Modified by
+ *         Modified by
  * @author Charles Billingsley
  * @author Josh Getter
  * @author Brent Willman
  */
 public class CaptureAudio {
 
-	final int bufSize = 16384;
+	/**
+	 * The sample rate in which the audio should be captured.
+	 */
+	private static final float RATE = 16000;
 
+	/**
+	 * The sample size of which the audio should be captured.
+	 */
+	private static final int SAMPLE_SIZE = 16;
+
+	/**
+	 * The number of audio channels to be captured.
+	 */
+	private static final int CHANNELS = 1;
+
+	/**
+	 * The stream of audio entering the computer.
+	 */
 	AudioInputStream audioInputStream;
-
-	String errStr;
-
-	double duration, seconds;
-
-	File file;
 
 	TargetDataLine line;
 
-	Thread thread;
-
-
-	public void shutDown(String message) {
+	/**
+	 * Closes the line and collects any error messages.
+	 * 
+	 * @param message
+	 *            the error message being passed into the method
+	 */
+	public final void shutDown(final String message) {
+		String errStr = message;
 		line.stop();
 		line.close();
-		if ((errStr = message) != null && thread != null) {
-			thread = null;
+		if (errStr != null) {
 			System.err.println(errStr);
 		}
-		thread = null;
 	}
 
-public AudioInputStream getStream() {
+	/**
+	 * Captures the audio from our microphone.
+	 * 
+	 * @return the audio data that is coming through the computer
+	 */
+	public final AudioInputStream getStream() {
 
-		duration = 0;
 		audioInputStream = null;
 
-		// define the required attributes for our line,
-		// and make sure a compatible line is supported.
-
-		AudioFormat.Encoding encoding = AudioFormat.Encoding.PCM_SIGNED;
-		float rate = 16000;
-		int channels = 2;
-		int frameSize = 4;
-		int sampleSize = 16;
-		boolean bigEndian = true;
-
-		/*AudioFormat format = new AudioFormat(encoding, rate, sampleSize,
-				channels, (sampleSize / 8) * channels, rate, bigEndian);*/
-		AudioFormat format = new AudioFormat(16000,16, 1, true, false);
+		AudioFormat format = new AudioFormat(RATE, SAMPLE_SIZE, CHANNELS, true,
+				false);
 
 		DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 
@@ -127,25 +126,15 @@ public AudioInputStream getStream() {
 			return null;
 		} catch (SecurityException ex) {
 			shutDown(ex.toString());
-			// JavaSound.showInfoDialog();
 			return null;
 		} catch (Exception ex) {
 			shutDown(ex.toString());
 			return null;
 		}
-		AudioInputStream audioInputStream = new AudioInputStream(line);
-		return audioInputStream;
-		
-		/*long milliseconds = (long) ((audioInputStream.getFrameLength() * 1000) / format
-				.getFrameRate());
-		duration = milliseconds / 1000.0;*/
 
-		/*try {
-			audioInputStream.reset();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
-		}*/
+		audioInputStream = new AudioInputStream(line);
+
+		return audioInputStream;
 
 	}
 }
