@@ -73,12 +73,10 @@ public class CaptureAudio {
 	 * The number of audio channels to be captured.
 	 */
 	private static final int CHANNELS = 1;
-
+	
 	/**
-	 * The stream of audio entering the computer.
+	 * The line coming into the computer.
 	 */
-	AudioInputStream audioInputStream;
-
 	TargetDataLine line;
 
 	/**
@@ -102,6 +100,8 @@ public class CaptureAudio {
 	 * @return the audio data that is coming through the computer
 	 */
 	public final AudioInputStream getStream() {
+		
+		AudioInputStream audioInputStream;
 
 		audioInputStream = null;
 
