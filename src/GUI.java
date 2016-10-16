@@ -83,13 +83,14 @@ public class GUI extends Application {
 	@Override
 	public final void start(final Stage primaryStage) {
 
+		
 		primaryStage.setTitle("WatsUp");
-
-		Button watsonSpeakButton = new Button();
-
+		//Speak on start-up
+		Runnable runner = new TextToAudio(
+				"Hello! This is Watson, how may I assist you?");
+		Thread thread = new Thread(runner);
+		thread.start();
 		Button watsonListenButton = new Button();
-
-		watsonSpeakButton.setText("Make Watson Speak");
 
 		watsonListenButton.setText("Begin Listening");
 
@@ -114,21 +115,10 @@ public class GUI extends Application {
 				}
 			}
 		});
-		watsonSpeakButton.setOnAction(new EventHandler<ActionEvent>() {
 
-			@Override
-			public void handle(final ActionEvent event) {
-				Runnable runner = new TextToAudio(
-						"Hello! This is Watson, how may I assist you?");
-				Thread thread = new Thread(runner);
-				thread.start();
-			}
-		});
 
-		watsonSpeakButton.setLayoutX(SPEAK_BUTTON_LAYOUT_X);
 		watsonListenButton.setLayoutX(LISTEN_BUTTON_LAYOUT_X);
 		StackPane root = new StackPane();
-		root.getChildren().add(watsonSpeakButton);
 		root.getChildren().add(watsonListenButton);
 		primaryStage.setScene(new Scene(root, GUI_WIDTH, GUI_HEIGHT));
 		primaryStage.show();
