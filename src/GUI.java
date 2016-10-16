@@ -97,7 +97,6 @@ public class GUI extends Application {
 		watsonListenButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent event) {
-				// TODO Auto-generated method stub
 				if (stopListenClick) {
 					// Click intended to stop listening.
 					audioToText.endStream();
