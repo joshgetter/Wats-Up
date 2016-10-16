@@ -1,3 +1,4 @@
+package watsUp;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
@@ -91,6 +92,7 @@ public class AudioToText implements Callable<String> {
 					+ transcribedPhrase.replaceAll("\\s+", "%20");
 			try {
 				Desktop.getDesktop().browse(new URI(searchString));
+				System.out.println("Success Browser Opened");
 			} catch (IOException | URISyntaxException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
