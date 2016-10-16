@@ -1,3 +1,7 @@
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -36,7 +40,6 @@ public class AudioToText implements Callable<String> {
 		service.setUsernameAndPassword("95c52d86-c897-4870-99bc-e1bcaa6b25d5",
 				"dA2xxyWJmgHy");
 		List<SpeechModel> models = service.getModels();
-		System.out.println(models);
 		RecognizeOptions options = new RecognizeOptions()
 				.contentType(HttpMediaType.AUDIO_RAW + "; rate=16000")
 				.continuous(true).interimResults(false);
@@ -45,7 +48,6 @@ public class AudioToText implements Callable<String> {
 			@Override
 			public void onMessage(final SpeechResults speechResults) {
 				String transcribedPhrase = "";
-				System.out.println(speechResults);
 				// String currentPhrase = "";
 				List<Transcript> results = speechResults.getResults();
 				for (Transcript t : results) {
@@ -53,7 +55,8 @@ public class AudioToText implements Callable<String> {
 							.getAlternatives().get(0).getTranscript());
 				}
 				System.out.println("Results are:" + transcribedPhrase);
-				finalTranscription = transcribedPhrase;
+				//Open browser based on request.
+				openBrowser(transcribedPhrase);
 			}
 
 			@Override
@@ -73,4 +76,30 @@ public class AudioToText implements Callable<String> {
 	public final void endStream() {
 		capture.shutDown(null);
 	}
+<<<<<<< HEAD
+=======
+	/**
+	 * Opens the browser based on the current request.
+	 * @param transcribedPhrase
+	 */
+	public void openBrowser(String transcribedPhrase){
+		//Speaks request
+		Runnable runner = new TextToAudio(
+				"Searching for " + transcribedPhrase);
+		Thread thread = new Thread(runner);
+		thread.start();
+		
+		if(Desktop.isDesktopSupported())
+		{
+			String searchString = "www.google.com/search?q=" + transcribedPhrase.replaceAll("\\s+", "%20");
+		  try {
+			Desktop.getDesktop().browse(new URI(searchString));
+		} catch (IOException | URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+	}
+
+>>>>>>> branch 'develop' of https://github.com/joshgetter/Wats-Up.git
 }
