@@ -23,6 +23,7 @@ public class AudioToText implements Callable {
 	/**
 	 * The string that was transcribed by Watson.
 	 */
+	String finalTranscription = "";
 
 	/**
 	 * The audio as it's captured.
@@ -48,10 +49,11 @@ public class AudioToText implements Callable {
 				// String currentPhrase = "";
 				List<Transcript> results = speechResults.getResults();
 				for (Transcript t : results) {
-					transcribedPhrase += t.getAlternatives().get(0)
-							.getTranscript();
+					transcribedPhrase = transcribedPhrase.concat(t
+							.getAlternatives().get(0).getTranscript());
 				}
 				System.out.println("Results are:" + transcribedPhrase);
+				finalTranscription = transcribedPhrase;
 			}
 
 			@Override
@@ -60,11 +62,9 @@ public class AudioToText implements Callable {
 			}
 		};
 
-		service.recognizeUsingWebSockets(capture.getStream(), options, delegate);
-		// SpeechResults transcript = service.recognize(capture.getStream(),
-		// options);
-//		return transcribedPhrase;
-		return null;
+		service.recognizeUsingWebSockets(
+				capture.getStream(), options, delegate);
+		return finalTranscription;
 	}
 
 	/**
@@ -73,6 +73,5 @@ public class AudioToText implements Callable {
 	public final void endStream() {
 		capture.shutDown(null);
 	}
-
 
 }
