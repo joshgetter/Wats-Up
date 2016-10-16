@@ -18,17 +18,17 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeD
  * @author Brent Willman
  *
  */
-public class AudioToText implements Callable {
+public class AudioToText implements Callable<String> {
 
 	/**
 	 * The string that was transcribed by Watson.
 	 */
-	String finalTranscription = "";
+	private String finalTranscription = "";
 
 	/**
 	 * The audio as it's captured.
 	 */
-	CaptureAudio capture = new CaptureAudio();
+	private CaptureAudio capture = new CaptureAudio();
 
 	@Override
 	public final String call() throws Exception {
@@ -73,5 +73,4 @@ public class AudioToText implements Callable {
 	public final void endStream() {
 		capture.shutDown(null);
 	}
-
 }

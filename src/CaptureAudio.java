@@ -32,7 +32,7 @@ public class CaptureAudio {
 	/**
 	 * The line coming into the computer.
 	 */
-	TargetDataLine line;
+	private TargetDataLine line;
 
 	/**
 	 * Closes the line and collects any error messages.

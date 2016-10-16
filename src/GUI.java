@@ -43,7 +43,7 @@ public class GUI extends Application {
 	/**
 	 * AudioToText instance to transcribe audio.
 	 */
-	AudioToText audioToText;
+	private AudioToText audioToText;
 
 	/**
 	 * Indicates whether the button was clicked to stop the input stream.
