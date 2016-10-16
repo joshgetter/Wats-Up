@@ -32,11 +32,4 @@
 		<nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
 		<nature>edu.umd.cs.findbugs.plugin.eclipse.findbugsNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>checkstyle.xml</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/workspace/checkstyle.xml</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>

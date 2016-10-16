@@ -108,9 +108,10 @@ public class GUI extends Application {
 					ExecutorService executor = Executors
 							.newSingleThreadExecutor();
 					Future<String> result = executor.submit(audioToText);
+					System.out.println(result);
 					watsonListenButton.setText("Stop Listening");
 					stopListenClick = true;
-
+					
 				}
 			}
 		});

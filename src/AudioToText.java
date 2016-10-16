@@ -8,7 +8,6 @@ import java.util.concurrent.Callable;
 import com.ibm.watson.developer_cloud.http.HttpMediaType;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.RecognizeOptions;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
-import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechModel;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.Transcript;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeDelegate;
@@ -39,7 +38,6 @@ public class AudioToText implements Callable<String> {
 		SpeechToText service = new SpeechToText();
 		service.setUsernameAndPassword("95c52d86-c897-4870-99bc-e1bcaa6b25d5",
 				"dA2xxyWJmgHy");
-		List<SpeechModel> models = service.getModels();
 		RecognizeOptions options = new RecognizeOptions()
 				.contentType(HttpMediaType.AUDIO_RAW + "; rate=16000")
 				.continuous(true).interimResults(false);
@@ -55,7 +53,7 @@ public class AudioToText implements Callable<String> {
 							.getAlternatives().get(0).getTranscript());
 				}
 				System.out.println("Results are:" + transcribedPhrase);
-				//Open browser based on request.
+				// Open browser based on request.
 				openBrowser(transcribedPhrase);
 			}
 
@@ -76,30 +74,27 @@ public class AudioToText implements Callable<String> {
 	public final void endStream() {
 		capture.shutDown(null);
 	}
-<<<<<<< HEAD
-=======
+
 	/**
 	 * Opens the browser based on the current request.
-	 * @param transcribedPhrase
+	 * 
+	 * @param transcribedPhrase the phrase that was transcribed
 	 */
-	public void openBrowser(String transcribedPhrase){
-		//Speaks request
-		Runnable runner = new TextToAudio(
-				"Searching for " + transcribedPhrase);
+	public final void openBrowser(final String transcribedPhrase) {
+		// Speaks request
+		Runnable runner = new TextToAudio("Searching for " + transcribedPhrase);
 		Thread thread = new Thread(runner);
 		thread.start();
-		
-		if(Desktop.isDesktopSupported())
-		{
-			String searchString = "www.google.com/search?q=" + transcribedPhrase.replaceAll("\\s+", "%20");
-		  try {
-			Desktop.getDesktop().browse(new URI(searchString));
-		} catch (IOException | URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		if (Desktop.isDesktopSupported()) {
+			String searchString = "www.google.com/search?q="
+					+ transcribedPhrase.replaceAll("\\s+", "%20");
+			try {
+				Desktop.getDesktop().browse(new URI(searchString));
+			} catch (IOException | URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
-
->>>>>>> branch 'develop' of https://github.com/joshgetter/Wats-Up.git
 }
