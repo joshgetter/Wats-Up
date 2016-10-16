@@ -1,6 +1,5 @@
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 
 import com.ibm.watson.developer_cloud.http.HttpMediaType;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.RecognizeOptions;
@@ -20,12 +19,11 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeD
  *
  */
 public class AudioToText implements Callable {
-	
+
 	/**
 	 * The string that was transcribed by Watson.
 	 */
-	private String transcribedPhrase;
-	
+
 	/**
 	 * The audio as it's captured.
 	 */
@@ -33,11 +31,11 @@ public class AudioToText implements Callable {
 
 	@Override
 	public final String call() throws Exception {
-		// String toReturn;
 		SpeechToText service = new SpeechToText();
 		service.setUsernameAndPassword("95c52d86-c897-4870-99bc-e1bcaa6b25d5",
 				"dA2xxyWJmgHy");
 		List<SpeechModel> models = service.getModels();
+		System.out.println(models);
 		RecognizeOptions options = new RecognizeOptions()
 				.contentType(HttpMediaType.AUDIO_RAW + "; rate=16000")
 				.continuous(true).interimResults(false);
@@ -45,30 +43,16 @@ public class AudioToText implements Callable {
 		BaseRecognizeDelegate delegate = new BaseRecognizeDelegate() {
 			@Override
 			public void onMessage(final SpeechResults speechResults) {
+				String transcribedPhrase = "";
 				System.out.println(speechResults);
-				setTranscribedPhrase(speechResults.toString());
+				// String currentPhrase = "";
+				List<Transcript> results = speechResults.getResults();
+				for (Transcript t : results) {
+					transcribedPhrase += t.getAlternatives().get(0)
+							.getTranscript();
+				}
+				System.out.println("Results are:" + transcribedPhrase);
 			}
-		RecognizeOptions options = new RecognizeOptions().contentType(HttpMediaType.AUDIO_RAW + "; rate=16000")
-				  .continuous(true).interimResults(false);
-		
-				BaseRecognizeDelegate delegate = new BaseRecognizeDelegate() {
-				    @Override
-				    public void onMessage(SpeechResults speechResults) {
-				      System.out.println(speechResults);
-				      //toReturn = speechResults.toString();
-				      List<Transcript> results = speechResults.getResults();
-				      for(Transcript t : results){
-				    	  toReturn = toReturn + t.getAlternatives().get(0).getTranscript();
-				      }
-				      System.out.println("Results are:" + toReturn);
-				      
-				    }
-				    	
-				    @Override
-				    public void onError(Exception e) {
-				      e.printStackTrace();
-				    }
-				  };
 
 			@Override
 			public void onError(final Exception e) {
@@ -76,11 +60,11 @@ public class AudioToText implements Callable {
 			}
 		};
 
-		service.recognizeUsingWebSockets(capture.getStream(),
-				options, delegate);
+		service.recognizeUsingWebSockets(capture.getStream(), options, delegate);
 		// SpeechResults transcript = service.recognize(capture.getStream(),
 		// options);
-		return getTranscribedPhrase();
+//		return transcribedPhrase;
+		return null;
 	}
 
 	/**
@@ -90,18 +74,5 @@ public class AudioToText implements Callable {
 		capture.shutDown(null);
 	}
 
-	/**
-	 * @return the transcribedPhrase
-	 */
-	public final String getTranscribedPhrase() {
-		return transcribedPhrase;
-	}
-
-	/**
-	 * @param pTranscribedPhrase the transcribedPhrase to set
-	 */
-	public final void setTranscribedPhrase(final String pTranscribedPhrase) {
-		this.transcribedPhrase = pTranscribedPhrase;
-	}
 
 }
