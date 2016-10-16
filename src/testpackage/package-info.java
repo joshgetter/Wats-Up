@@ -5,4 +5,4 @@
  * @author Josh
  *
  */
-package testPackage;
+package testpackage;

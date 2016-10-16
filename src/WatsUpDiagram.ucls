@@ -2,67 +2,67 @@
 <class-diagram version="1.1.11" icons="false" automaticImage="PNG" always-add-relationships="true" 
   generalizations="true" realizations="true" associations="true" dependencies="true" nesting-relationships="true" 
   router="FAN">  
-  <class id="1" language="java" name="GUI" project="Wats Up" file="/Wats Up/src/GUI.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="445" y="362"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="2" language="java" name="TextToAudio" project="Wats Up" file="/Wats Up/src/TextToAudio.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="652" y="448"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="3" language="java" name="CaptureAudio" project="Wats Up" file="/Wats Up/src/CaptureAudio.java" 
+  <class id="1" language="java" name="watsup.TextToAudio" project="Wats Up" file="/Wats Up/src/watsup/TextToAudio.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="210" y="609"/>    
+    <position height="-1" width="-1" x="518" y="578"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="AudioToText" project="Wats Up" file="/Wats Up/src/AudioToText.java" binary="false" 
+  <class id="2" language="java" name="watsup.CaptureAudio" project="Wats Up" 
+    file="/Wats Up/src/watsup/CaptureAudio.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="339" y="610"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="watsup.AudioToText" project="Wats Up" file="/Wats Up/src/watsup/AudioToText.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="368" y="404"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="watsup.GUI" project="Wats Up" file="/Wats Up/src/watsup/GUI.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="211" y="358"/>    
+    <position height="-1" width="-1" x="489" y="166"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <dependency id="5">    
-    <bendpoint x="418" y="338"/>    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="2"/>  
+  <association id="5">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="6" name="capture"/>      
+      <multiplicity id="7" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <dependency id="8">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
   </dependency>  
-  <dependency id="6">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="2"/>  
-  </dependency>  
-  <association id="7">    
+  <association id="9">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="8" name="capture"/>      
-      <multiplicity id="9" minimum="0" maximum="1"/>    
+      <attribute id="10" name="audioToText"/>      
+      <multiplicity id="11" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="false" multiplicity="false"/>  
   </association>  
-  <association id="10">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="11" name="audioToText"/>      
-      <multiplicity id="12" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
+  <dependency id="12">    
+    <bendpoint x="469" y="325"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

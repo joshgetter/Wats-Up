@@ -1,11 +1,11 @@
-package testPackage;
+package testpackage;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import watsUp.AudioToText;
+import watsup.AudioToText;
 public class TestAudioToText {
 	@Test
 	public void AudioToTextTest(){

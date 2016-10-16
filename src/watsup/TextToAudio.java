@@ -1,4 +1,4 @@
-package watsUp;
+package watsup;
 
 import java.io.InputStream;
 
