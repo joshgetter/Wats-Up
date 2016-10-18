@@ -11,7 +11,7 @@ import watsup.TextToAudio;
 /**
  * Tester class for TextToAudio.java.
  * 
- * @author Charles
+ * @author Charles Billingsley
  *
  */
 public class TestTextToAudio {

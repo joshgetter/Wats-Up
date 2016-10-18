@@ -57,9 +57,7 @@ public class CaptureAudio {
 	 */
 	public final AudioInputStream getStream() {
 		
-		AudioInputStream audioInputStream;
-
-		audioInputStream = null;
+		AudioInputStream audioInputStream = null;
 
 		AudioFormat format = new AudioFormat(RATE, SAMPLE_SIZE, CHANNELS, true,
 				false);
