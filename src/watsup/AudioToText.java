@@ -88,7 +88,7 @@ public class AudioToText implements Callable<String> {
 		thread.start();
 
 		if (Desktop.isDesktopSupported()) {
-			String searchString = "www.google.com/search?q="
+			String searchString = "http://www.google.com/search?q="
 					+ transcribedPhrase.replaceAll("\\s+", "%20");
 			try {
 				Desktop.getDesktop().browse(new URI(searchString));
