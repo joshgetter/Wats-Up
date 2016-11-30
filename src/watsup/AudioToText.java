@@ -91,7 +91,7 @@ public class AudioToText implements Callable<String> {
 						String extract = (String) keys.next();
 
 						JSONObject first = pages.getJSONObject(extract);
-
+						
 						String finalOutput = first.getString("extract");
 						System.out.println(finalOutput);
 						String[] sArray = finalOutput.split("(?<=[a-z])\\.\\s+");
@@ -99,7 +99,12 @@ public class AudioToText implements Callable<String> {
 						toAudio.run();
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						if(transcribedPhrase != null && transcribedPhrase.isEmpty()==false){
+							System.out.println("Wikipedia found no results. Opening Browser...");
+							openBrowser(transcribedPhrase);
+						}else{
+							return;
+						}
 					}
 				}
 			}
