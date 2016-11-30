@@ -1,4 +1,5 @@
 package watsup;
+
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
@@ -55,12 +56,12 @@ public class AudioToText implements Callable<String> {
 				System.out.println("Results are:" + transcribedPhrase);
 				TextToKeywords textAnalysis = new TextToKeywords();
 				String keywords = textAnalysis.getKeyword(transcribedPhrase);
-				if(keywords == null){
+				if (keywords == null) {
 					// Open browser based on request.
 					openBrowser(transcribedPhrase);
-				}else{
-					System.out.println("Keywords are: "+keywords);
-					//Send to wikipedia API
+				} else {
+					System.out.println("Keywords are: " + keywords);
+					// Send to wikipedia API
 				}
 			}
 
@@ -70,8 +71,8 @@ public class AudioToText implements Callable<String> {
 			}
 		};
 
-		service.recognizeUsingWebSockets(
-				capture.getStream(), options, delegate);
+		service.recognizeUsingWebSockets(capture.getStream(), 
+				options, delegate);
 		return finalTranscription;
 	}
 
@@ -85,7 +86,8 @@ public class AudioToText implements Callable<String> {
 	/**
 	 * Opens the browser based on the current request.
 	 * 
-	 * @param transcribedPhrase the phrase that was transcribed
+	 * @param transcribedPhrase
+	 *            the phrase that was transcribed
 	 */
 	public final void openBrowser(final String transcribedPhrase) {
 		// Speaks request
