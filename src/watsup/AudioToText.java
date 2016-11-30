@@ -5,9 +5,14 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.ibm.watson.developer_cloud.http.HttpMediaType;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.RecognizeOptions;
@@ -77,6 +82,23 @@ public class AudioToText implements Callable<String> {
 						e.printStackTrace();
 					}
 					System.out.println(json);
+					try {
+						JSONObject top = new JSONObject(json);
+						JSONObject query = top.getJSONObject("query");
+						JSONObject pages = query.getJSONObject("pages");
+
+						@SuppressWarnings("unchecked")
+						Iterator<String> keys = pages.keys();
+						String extract = (String) keys.next();
+
+						JSONObject first = pages.getJSONObject(extract);
+
+						String finalOutput = first.getString("extract");
+						System.out.println(finalOutput);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 
@@ -86,8 +108,7 @@ public class AudioToText implements Callable<String> {
 			}
 		};
 
-		service.recognizeUsingWebSockets(capture.getStream(),
-				options, delegate);
+		service.recognizeUsingWebSockets(capture.getStream(), options, delegate);
 		return finalTranscription;
 	}
 
