@@ -54,8 +54,15 @@ public class AudioToText implements Callable<String> {
 							.getAlternatives().get(0).getTranscript());
 				}
 				System.out.println("Results are:" + transcribedPhrase);
-				// Open browser based on request.
-				openBrowser(transcribedPhrase);
+				TextToKeywords textAnalysis = new TextToKeywords();
+				String keywords = textAnalysis.getKeyword(transcribedPhrase);
+				if(keywords == null){
+					// Open browser based on request.
+					openBrowser(transcribedPhrase);
+				}else{
+					System.out.println("Keywords are: "+keywords);
+					//Send to wikipedia API
+				}
 			}
 
 			@Override
