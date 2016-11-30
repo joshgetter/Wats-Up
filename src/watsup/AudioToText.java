@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -95,6 +94,9 @@ public class AudioToText implements Callable<String> {
 
 						String finalOutput = first.getString("extract");
 						System.out.println(finalOutput);
+						String[] sArray = finalOutput.split("(?<=[a-z])\\.\\s+");
+						TextToAudio toAudio = new TextToAudio(sArray[0] + sArray[1]);
+						toAudio.run();
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
