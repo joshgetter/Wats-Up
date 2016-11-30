@@ -11,7 +11,6 @@ import javax.sound.sampled.TargetDataLine;
  * 
  * @author Charles Billingsley
  * @author Josh Getter
- * @author Brent Willman
  */
 public class CaptureAudio {
 

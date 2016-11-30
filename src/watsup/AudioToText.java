@@ -19,7 +19,6 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeD
  * 
  * @author Josh Getter
  * @author Charles Billingsley
- * @author Brent Willman
  *
  */
 public class AudioToText implements Callable<String> {

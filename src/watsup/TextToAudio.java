@@ -14,7 +14,6 @@ import com.ibm.watson.developer_cloud.text_to_speech.v1.util.WaveUtils;
  * 
  * @author Josh Getter
  * @author Charles Billingsley
- * @author Brent Willman
  *
  */
 public class TextToAudio implements Runnable {
