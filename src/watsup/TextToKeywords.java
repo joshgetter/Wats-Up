@@ -24,7 +24,6 @@ public class TextToKeywords {
 	 * @return the keyword(s) from the parsed sentence
 	 */
 	public final String getKeyword(final String inputText) {
-		// TODO Auto-generated method stub
 		AlchemyLanguage alchemy = new AlchemyLanguage();
 		alchemy.setApiKey("8a7ac2a6401df09dbff81fab7ce0f45313c4f364");
 		Map<String, Object> params = new HashMap<String, Object>();

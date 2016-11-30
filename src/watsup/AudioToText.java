@@ -4,7 +4,9 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.Callable;
 
 import com.ibm.watson.developer_cloud.http.HttpMediaType;
@@ -61,7 +63,20 @@ public class AudioToText implements Callable<String> {
 					openBrowser(transcribedPhrase);
 				} else {
 					System.out.println("Keywords are: " + keywords);
-					// Send to wikipedia API
+					String json = "";
+					try {
+						URL theURL = new URL(
+								"https://en.wikipedia.org/w/api.php?format=json&action=query"
+										+ "&prop=extracts&exintro=&explaintext=&titles="
+										+ keywords.replaceAll("\\s+", "%20"));
+						Scanner scan = new Scanner(theURL.openStream());
+						while (scan.hasNextLine()) {
+							json += scan.nextLine();
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					System.out.println(json);
 				}
 			}
 
@@ -71,7 +86,7 @@ public class AudioToText implements Callable<String> {
 			}
 		};
 
-		service.recognizeUsingWebSockets(capture.getStream(), 
+		service.recognizeUsingWebSockets(capture.getStream(),
 				options, delegate);
 		return finalTranscription;
 	}
