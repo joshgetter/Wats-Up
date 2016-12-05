@@ -62,6 +62,53 @@ public class AudioToText implements Callable<String> {
 				System.out.println("Results are:" + transcribedPhrase);
 				APIController apiController = new APIController();
 				apiController.analyze(transcribedPhrase);
+				TextToKeywords textAnalysis = new TextToKeywords();
+				String keywords = textAnalysis.getKeyword(transcribedPhrase);
+				if (keywords == null) {
+					// Open browser based on request.
+					openBrowser(transcribedPhrase);
+				} else {
+					System.out.println("Keywords are: " + keywords);
+					String json = "";
+					try {
+						URL theURL = new URL(
+								"https://en.wikipedia.org/w/api.php?format=json&action=query"
+										+ "&prop=extracts&exintro=&explaintext=&titles="
+										+ keywords.replaceAll("\\s+", "%20"));
+						Scanner scan = new Scanner(theURL.openStream());
+						while (scan.hasNextLine()) {
+							json += scan.nextLine();
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					System.out.println(json);
+					try {
+						JSONObject top = new JSONObject(json);
+						JSONObject query = top.getJSONObject("query");
+						JSONObject pages = query.getJSONObject("pages");
+
+						@SuppressWarnings("unchecked")
+						Iterator<String> keys = pages.keys();
+						String extract = (String) keys.next();
+
+						JSONObject first = pages.getJSONObject(extract);
+						
+						String finalOutput = first.getString("extract");
+						System.out.println(finalOutput);
+						String[] sArray = finalOutput.split("(?<=[a-z])\\.\\s+");
+						TextToAudio toAudio = new TextToAudio(sArray[0] + sArray[1]);
+						toAudio.run();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						if(transcribedPhrase != null && transcribedPhrase.isEmpty()==false){
+							System.out.println("Wikipedia found no results. Opening Browser...");
+							openBrowser(transcribedPhrase);
+						}else{
+							return;
+						}
+					}
+				}
 			}
 
 			@Override
@@ -70,8 +117,7 @@ public class AudioToText implements Callable<String> {
 			}
 		};
 
-		service.recognizeUsingWebSockets(
-				capture.getStream(), options, delegate);
+		service.recognizeUsingWebSockets(capture.getStream(), options, delegate);
 		return finalTranscription;
 	}
 
@@ -80,5 +126,30 @@ public class AudioToText implements Callable<String> {
 	 */
 	public final void endStream() {
 		capture.shutDown(null);
+	}
+
+	/**
+	 * Opens the browser based on the current request.
+	 * 
+	 * @param transcribedPhrase
+	 *            the phrase that was transcribed
+	 */
+	public final void openBrowser(final String transcribedPhrase) {
+		// Speaks request
+		Runnable runner = new TextToAudio("Searching for " + transcribedPhrase);
+		Thread thread = new Thread(runner);
+		thread.start();
+
+		if (Desktop.isDesktopSupported()) {
+			String searchString = "http://www.google.com/search?q="
+					+ transcribedPhrase.replaceAll("\\s+", "%20");
+			try {
+				Desktop.getDesktop().browse(new URI(searchString));
+				System.out.println("Success Browser Opened");
+			} catch (IOException | URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }
