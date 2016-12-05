@@ -21,16 +21,15 @@ import org.json.JSONObject;
  */
 public class APIController {
 
-	
-	public APIController ( ) {
-		
+	public APIController() {
+
 	}
-	
-	public void analyze (String unparsedString) {
+
+	public void analyze(String unparsedString) {
 		if (unparsedString.contains("Weather")) {
-			//weather api here
+			// weather api here
 		} else if (unparsedString.contains("Sports")) {
-			//weather api here
+			// weather api here
 		} else {
 			TextToKeywords textAnalysis = new TextToKeywords();
 			String keywords = textAnalysis.getKeyword(unparsedString);
@@ -40,19 +39,23 @@ public class APIController {
 			} else {
 				System.out.println("Keywords are: " + keywords);
 				String json = "";
-				String URL = "https://en.wikipedia.org"
+				String url = "https://en.wikipedia.org"
 						+ "/w/api.php?format=json&action=query"
-						+ "&prop=extracts&exintro="
-						+ "&explaintext=&titles=";
+						+ "&prop=extracts&exintro=" + "&explaintext=&titles=";
+				Scanner scan = null;
 				try {
-					URL theURL = new URL(
-							URL + keywords.replaceAll("\\s+", "%20"));
-					Scanner scan = new Scanner(theURL.openStream());
+					URL theURL = new URL(url
+							+ keywords.replaceAll("\\s+", "%20"));
+					scan = new Scanner(theURL.openStream());
 					while (scan.hasNextLine()) {
 						json += scan.nextLine();
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
+				} finally {
+					if (scan != null) {
+						scan.close();
+					}
 				}
 				System.out.println(json);
 				try {
@@ -68,10 +71,9 @@ public class APIController {
 
 					String finalOutput = first.getString("extract");
 					System.out.println(finalOutput);
-					String[] sArray = finalOutput
-							.split("(?<=[a-z])\\.\\s+");
-					TextToAudio toAudio = new TextToAudio(sArray[0]
-							+ sArray[1]);
+					String[] sArray = finalOutput.split("(?<=[a-z])\\.\\s+");
+					TextToAudio toAudio = 
+							new TextToAudio(sArray[0] + sArray[1]);
 					toAudio.run();
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -79,7 +81,7 @@ public class APIController {
 			}
 		}
 	}
-	
+
 	/**
 	 * Opens the browser based on the current request.
 	 * 
