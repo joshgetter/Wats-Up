@@ -6,6 +6,7 @@ import java.util.Map;
 import com.ibm.watson.developer_cloud.alchemy.v1.AlchemyLanguage;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Keyword;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Keywords;
+import com.ibm.watson.developer_cloud.http.ServiceCall;
 
 /**
  * A class that pulls keywords out of a string to be used for better web
@@ -32,7 +33,8 @@ public class TextToKeywords {
 			return null;
 		}
 		params.put(AlchemyLanguage.TEXT, inputText);
-		Keywords keywords = alchemy.getKeywords(params);
+		ServiceCall<Keywords> keywordsServiceCall = alchemy.getKeywords(params);
+		Keywords keywords = keywordsServiceCall.execute();
 		if (keywords.getKeywords().isEmpty()) {
 			return null;
 		}

@@ -14,11 +14,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.ibm.watson.developer_cloud.http.HttpMediaType;
-import com.ibm.watson.developer_cloud.speech_to_text.v1.RecognizeOptions;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions.Builder;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.Transcript;
-import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeDelegate;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeCallback;
 
 /**
  * Class that takes the inputed audio and sends it off to Watson to be changed
@@ -45,13 +46,33 @@ public class AudioToText implements Callable<String> {
 		SpeechToText service = new SpeechToText();
 		service.setUsernameAndPassword("95c52d86-c897-4870-99bc-e1bcaa6b25d5",
 				"dA2xxyWJmgHy");
-		RecognizeOptions options = new RecognizeOptions()
+		RecognizeOptions options = new RecognizeOptions.Builder()
 				.contentType(HttpMediaType.AUDIO_RAW + "; rate=16000")
-				.continuous(true).interimResults(false);
+				.continuous(true)
+				.interimResults(false)
+				.smartFormatting(true)
+				.build();
+				
+				
 
-		BaseRecognizeDelegate delegate = new BaseRecognizeDelegate() {
-			@Override
-			public void onMessage(final SpeechResults speechResults) {
+		/*BaseRecognizeCallback delegate = new BaseRecognizeCallback() {
+			public void onTranscription(final SpeechResults speechResults) {
+				String transcribedPhrase = "";
+				// String currentPhrase = "";
+				List<Transcript> results = speechResults.getResults();
+				for (Transcript t : results) {
+					transcribedPhrase = transcribedPhrase.concat(t
+							.getAlternatives().get(0).getTranscript());
+				}
+				System.out.println("Results are:" + transcribedPhrase);
+				APIController apiController = new APIController();
+				apiController.analyze(transcribedPhrase);				
+			}
+
+		};*/
+
+		service.recognizeUsingWebSocket(capture.getStream(), options, new BaseRecognizeCallback(){
+			public void onTranscription(final SpeechResults speechResults){
 				String transcribedPhrase = "";
 				// String currentPhrase = "";
 				List<Transcript> results = speechResults.getResults();
@@ -62,62 +83,8 @@ public class AudioToText implements Callable<String> {
 				System.out.println("Results are:" + transcribedPhrase);
 				APIController apiController = new APIController();
 				apiController.analyze(transcribedPhrase);
-				TextToKeywords textAnalysis = new TextToKeywords();
-				String keywords = textAnalysis.getKeyword(transcribedPhrase);
-				if (keywords == null) {
-					// Open browser based on request.
-					openBrowser(transcribedPhrase);
-				} else {
-					System.out.println("Keywords are: " + keywords);
-					String json = "";
-					try {
-						URL theURL = new URL(
-								"https://en.wikipedia.org/w/api.php?format=json&action=query"
-										+ "&prop=extracts&exintro=&explaintext=&titles="
-										+ keywords.replaceAll("\\s+", "%20"));
-						Scanner scan = new Scanner(theURL.openStream());
-						while (scan.hasNextLine()) {
-							json += scan.nextLine();
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					System.out.println(json);
-					try {
-						JSONObject top = new JSONObject(json);
-						JSONObject query = top.getJSONObject("query");
-						JSONObject pages = query.getJSONObject("pages");
-
-						@SuppressWarnings("unchecked")
-						Iterator<String> keys = pages.keys();
-						String extract = (String) keys.next();
-
-						JSONObject first = pages.getJSONObject(extract);
-						
-						String finalOutput = first.getString("extract");
-						System.out.println(finalOutput);
-						String[] sArray = finalOutput.split("(?<=[a-z])\\.\\s+");
-						TextToAudio toAudio = new TextToAudio(sArray[0] + sArray[1]);
-						toAudio.run();
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						if(transcribedPhrase != null && transcribedPhrase.isEmpty()==false){
-							System.out.println("Wikipedia found no results. Opening Browser...");
-							openBrowser(transcribedPhrase);
-						}else{
-							return;
-						}
-					}
-				}
 			}
-
-			@Override
-			public void onError(final Exception e) {
-				e.printStackTrace();
-			}
-		};
-
-		service.recognizeUsingWebSockets(capture.getStream(), options, delegate);
+		});
 		return finalTranscription;
 	}
 

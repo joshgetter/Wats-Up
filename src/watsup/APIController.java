@@ -76,7 +76,8 @@ public class APIController {
 							new TextToAudio(sArray[0] + sArray[1]);
 					toAudio.run();
 				} catch (JSONException e) {
-					e.printStackTrace();
+					System.out.println("Wikipedia Found No Results");
+					openBrowser(unparsedString);
 				}
 			}
 		}
