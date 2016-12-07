@@ -5,6 +5,7 @@ import java.io.InputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+import com.ibm.watson.developer_cloud.http.ServiceCall;
 import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
 import com.ibm.watson.developer_cloud.text_to_speech.v1.model.Voice;
 import com.ibm.watson.developer_cloud.text_to_speech.v1.util.WaveUtils;
@@ -43,9 +44,10 @@ public class TextToAudio implements Runnable {
 		System.out.println("Trying to speak");
 		try {
 			Clip audioClip = AudioSystem.getClip();
-			InputStream stream = service.synthesize(spokenPhrase,
+			ServiceCall<InputStream> stream = service.synthesize(spokenPhrase,
 					Voice.EN_ALLISON);
-			InputStream in = WaveUtils.reWriteWaveHeader(stream);
+			
+			InputStream in = WaveUtils.reWriteWaveHeader(stream.execute());
 			audioClip.open(AudioSystem.getAudioInputStream(in));
 			audioClip.start();
 			/*
