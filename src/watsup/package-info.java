@@ -5,6 +5,5 @@ package watsup;
 /**
  * @author Josh Getter
  * @author Charles Billingsley
- * @author Brent Willman
  *
  */

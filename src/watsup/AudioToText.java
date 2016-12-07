@@ -4,19 +4,12 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.Callable;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.ibm.watson.developer_cloud.http.HttpMediaType;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
-import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions.Builder;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.Transcript;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeCallback;
@@ -71,8 +64,9 @@ public class AudioToText implements Callable<String> {
 
 		};*/
 
-		service.recognizeUsingWebSocket(capture.getStream(), options, new BaseRecognizeCallback(){
-			public void onTranscription(final SpeechResults speechResults){
+		service.recognizeUsingWebSocket(capture.getStream(), options, 
+				new BaseRecognizeCallback() {
+			public void onTranscription(final SpeechResults speechResults) {
 				String transcribedPhrase = "";
 				// String currentPhrase = "";
 				List<Transcript> results = speechResults.getResults();

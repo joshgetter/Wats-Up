@@ -44,7 +44,14 @@ public class TextToKeywords {
 		Keyword topKeyword = keywords.getKeywords().get(0);
 		return topKeyword.getText();
 	}
-	public final String getEntity(final String inputText){
+	
+	/**
+	 * Makes the call to the alchemy service.
+	 * 
+	 * @param inputText the unparsed text
+	 * @return the keywords
+	 */
+	public final String getEntity(final String inputText) {
 		AlchemyLanguage alchemy = new AlchemyLanguage();
 		alchemy.setApiKey("8a7ac2a6401df09dbff81fab7ce0f45313c4f364");
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -55,8 +62,8 @@ public class TextToKeywords {
 		params.put(AlchemyLanguage.TEXT, inputText);
 		ServiceCall<Entities> entityServiceCall = alchemy.getEntities(params);
 		List<Entity> entities = entityServiceCall.execute().getEntities();
-		for(Entity e : entities){
-			if(e.getType().equals("City")){
+		for (Entity e : entities) {
+			if (e.getType().equals("City")) {
 				return e.getText();
 			}
 		}
